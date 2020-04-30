@@ -39,13 +39,13 @@ func main() {
 			&cli.StringFlag{
 				Name:    "color",
 				Aliases: []string{"c"},
-				Value:   "blue",
+				Value:   "#ffffff",
 				Usage:   "Color for watermark text, name or #rrggbb",
 			},
 			&cli.Float64Flag{
 				Name:    "vertical-spacing",
 				Aliases: []string{"e"},
-				Value:   40.0,
+				Value:   200.0,
 				Usage:   "Vertical spacing between watermarks",
 			},
 			&cli.StringFlag{
@@ -60,17 +60,23 @@ func main() {
 				Value:   "Courier",
 				Usage:   "Font for watermark text",
 			},
+			&cli.StringFlag{
+				Name:    "font-path",
+				Aliases: []string{"af"},
+				Value:   "/Users/vanilla/gopath/src/github.com/graceshare/watermark/RuiZiYunZiKuKaiTiGBK-1.ttf",
+				Usage:   "Add local font for watermark text",
+			},
 			&cli.Float64Flag{
 				Name:    "font-size",
 				Aliases: []string{"S"},
-				Value:   64.0,
+				Value:   30.0,
 				Usage:   "Font size for watermark text",
 			},
 			&cli.Float64Flag{
 				Name:    "horizontal-spacing",
 				Aliases: []string{"o"},
-				Value:   40.0,
-				Usage:   "Horizontal spacing between watermarks",
+				Value:   25.0,
+				Usage:   "Horizontal spacing between watermarks 横向间距",
 			},
 			&cli.Float64Flag{
 				Name:    "scale",
@@ -81,7 +87,7 @@ func main() {
 			&cli.Float64Flag{
 				Name:    "transparency",
 				Aliases: []string{"t"},
-				Value:   0.90,
+				Value:   0.30,
 				Usage:   "Transparency of watermark",
 			},
 			&cli.StringSliceFlag{
@@ -113,13 +119,14 @@ func main() {
 		}
 
 		waterMarker := &WaterMarker{
-			Text:              text,
+			Text:              "此图片仅供办理" + text + "业务使用，他用无效",
 			HorizontalSpacing: c.Float64("horizontal-spacing") * scale,
 			VerticalSpacing:   c.Float64("vertical-spacing") * scale,
 			FontSize:          c.Float64("font-size") * scale,
 			OutputDPI:         72,
 			FontName:          c.String("font"),
 			Color:             color,
+			FontPath:          c.String("font-path"),
 			Resize:            newSize,
 		}
 

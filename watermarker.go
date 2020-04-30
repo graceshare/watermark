@@ -5,11 +5,15 @@ import (
 	"image"
 	"image/color"
 	"io"
+	"io/ioutil"
+	"log"
 	"math"
 	"os"
 	"path/filepath"
 
 	"github.com/disintegration/imaging"
+	"github.com/golang/freetype/truetype"
+
 	"gonum.org/v1/plot/vg"
 	"gonum.org/v1/plot/vg/vgimg"
 )
@@ -21,6 +25,7 @@ type WaterMarker struct {
 	FontSize          float64
 	OutputDPI         int
 	FontName          string
+	FontPath          string
 	Color             color.Color
 	Resize            Size
 }
@@ -74,8 +79,18 @@ func (w *WaterMarker) mark(img image.Image, format string, out io.Writer) error 
 
 	c.SetColor(w.Color)
 
-	fontStyle, err := vg.MakeFont(w.FontName, l(w.FontSize))
+	fontName := "HiraginoSansGB"
+	ttfBytes, err := ioutil.ReadFile(w.FontPath)
 	if err != nil {
+		log.Println("读取字体文件失败", err.Error())
+	}
+	font, _ := truetype.Parse(ttfBytes)
+	vg.AddFont(fontName, font)
+
+	// fontStyle, err := vg.MakeFont(w.FontName, l(w.FontSize))
+	fontStyle, err := vg.MakeFont(fontName, l(w.FontSize))
+	if err != nil {
+		log.Println(err)
 		return err
 	}
 
